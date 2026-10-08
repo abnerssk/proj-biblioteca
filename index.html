@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1220">
+    <meta name="description" content="Sistema de gerenciamento de biblioteca.">
+    <title>Biblioteca | Painel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">B</div>
+                <div class="brand-copy">
+                    <strong>Biblioteca</strong>
+                    <span>Painel administrativo</span>
+                </div>
+            </div>
+
+            <div class="sidebar-label">GERENCIAMENTO</div>
+            <nav class="sidebar-nav" aria-label="Menu principal">
+                <button class="nav-item active" type="button" data-section="livros">
+                    <span class="nav-icon">▤</span>
+                    <span class="nav-text">Livros</span>
+                    <span class="nav-count" id="navLivrosCount">0</span>
+                </button>
+                <button class="nav-item" type="button" data-section="usuarios">
+                    <span class="nav-icon">♙</span>
+                    <span class="nav-text">Usuários</span>
+                    <span class="nav-count" id="navUsuariosCount">0</span>
+                </button>
+                <button class="nav-item" type="button" data-section="emprestimos">
+                    <span class="nav-icon">↗</span>
+                    <span class="nav-text">Empréstimos</span>
+                    <span class="nav-count" id="navAbertosCount">0</span>
+                </button>
+            </nav>
+
+        </aside>
+
+        <div class="main-shell">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Abrir menu">☰</button>
+                    <div>
+                        <span class="page-eyebrow" id="pageEyebrow">ACERVO</span>
+                        <h1 id="pageTitle">Livros</h1>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <span class="date-label" id="todayLabel"></span>
+                    <button class="icon-button" id="refreshAll" type="button" aria-label="Atualizar dados" title="Atualizar dados">↻</button>
+                </div>
+            </header>
+
+            <main class="content">
+                <section class="welcome-row">
+                    <div>
+                        <p class="welcome-kicker">VISÃO GERAL</p>
+                        <h2 id="sectionHeading">Seu acervo, organizado.</h2>
+                        <p class="welcome-text">Cadastre livros, acompanhe usuários e controle empréstimos sem sair do painel.</p>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="quick-btn" type="button" data-section="livros" data-focus="titulo">+ Novo livro</button>
+                        <button class="quick-btn secondary" type="button" data-section="usuarios" data-focus="nome">+ Novo usuário</button>
+                    </div>
+                </section>
+
+                <section class="stats-grid" aria-label="Resumo">
+                    <article class="stat-card accent-blue">
+                        <div class="stat-head"><span>Livros no acervo</span><span class="stat-symbol">▤</span></div>
+                        <strong id="totalLivros">0</strong>
+                        <small><span id="totalDisponiveis">0</span> disponíveis agora</small>
+                    </article>
+                    <article class="stat-card accent-green">
+                        <div class="stat-head"><span>Disponibilidade</span><span class="stat-symbol">✓</span></div>
+                        <strong id="taxaDisponibilidade">0%</strong>
+                        <small>do acervo livre para empréstimo</small>
+                    </article>
+                    <article class="stat-card accent-purple">
+                        <div class="stat-head"><span>Usuários</span><span class="stat-symbol">♙</span></div>
+                        <strong id="totalUsuarios">0</strong>
+                        <small>cadastros ativos</small>
+                    </article>
+                    <article class="stat-card accent-orange">
+                        <div class="stat-head"><span>Em aberto</span><span class="stat-symbol">↗</span></div>
+                        <strong id="totalAbertos">0</strong>
+                        <small>empréstimos aguardando devolução</small>
+                    </article>
+                </section>
+
+                <section class="panel" id="livros">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-kicker">CATÁLOGO</span>
+                            <h2>Cadastrar livro</h2>
+                            <p>Inclua um novo título no acervo e defina seus dados básicos.</p>
+                        </div>
+                        <span class="panel-chip blue">ACERVO</span>
+                    </div>
+
+                    <form id="formLivro" class="form-panel">
+                        <div class="field wide-field">
+                            <label for="titulo">Título</label>
+                            <input id="titulo" type="text" placeholder="Ex.: Dom Casmurro" autocomplete="off" required>
+                        </div>
+                        <div class="field">
+                            <label for="autor">Autor</label>
+                            <input id="autor" type="text" placeholder="Ex.: Machado de Assis" autocomplete="off" required>
+                        </div>
+                        <div class="field small-field">
+                            <label for="ano">Ano</label>
+                            <input id="ano" type="number" min="0" max="9999" placeholder="2026" inputmode="numeric">
+                        </div>
+                        <div class="form-submit">
+                            <button class="primary-button" type="submit">Cadastrar livro <span>→</span></button>
+                        </div>
+                    </form>
+
+                    <div class="list-toolbar">
+                        <div>
+                            <h3>Acervo</h3>
+                            <span id="livrosResumo">0 registros</span>
+                        </div>
+                        <div class="toolbar-actions">
+                            <div class="search-box">
+                                <span>⌕</span>
+                                <input id="buscarLivros" type="search" placeholder="Buscar título ou autor" aria-label="Buscar livros">
+                            </div>
+                            <button class="outline-button" type="button" data-refresh="livros">Atualizar</button>
+                        </div>
+                    </div>
+                    <div id="listaLivros" class="cards-grid" aria-live="polite"></div>
+                </section>
+
+                <section class="panel" id="usuarios" hidden>
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-kicker">CADASTROS</span>
+                            <h2>Cadastrar usuário</h2>
+                            <p>Cadastre as pessoas que podem retirar livros do acervo.</p>
+                        </div>
+                        <span class="panel-chip purple">USUÁRIOS</span>
+                    </div>
+
+                    <form id="formUsuario" class="form-panel">
+                        <div class="field">
+                            <label for="nome">Nome</label>
+                            <input id="nome" type="text" placeholder="Nome completo" autocomplete="name" required>
+                        </div>
+                        <div class="field">
+                            <label for="email">E-mail <span>opcional</span></label>
+                            <input id="email" type="email" placeholder="nome@email.com" autocomplete="email">
+                        </div>
+                        <div class="form-submit">
+                            <button class="primary-button purple-button" type="submit">Cadastrar usuário <span>→</span></button>
+                        </div>
+                    </form>
+
+                    <div class="list-toolbar">
+                        <div>
+                            <h3>Usuários</h3>
+                            <span id="usuariosResumo">0 registros</span>
+                        </div>
+                        <div class="toolbar-actions">
+                            <div class="search-box">
+                                <span>⌕</span>
+                                <input id="buscarUsuarios" type="search" placeholder="Buscar nome ou e-mail" aria-label="Buscar usuários">
+                            </div>
+                            <button class="outline-button" type="button" data-refresh="usuarios">Atualizar</button>
+                        </div>
+                    </div>
+                    <div id="listaUsuarios" class="cards-grid" aria-live="polite"></div>
+                </section>
+
+                <section class="panel" id="emprestimos" hidden>
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-kicker">MOVIMENTAÇÃO</span>
+                            <h2>Registrar empréstimo</h2>
+                            <p>Vincule um livro disponível a um usuário e registre a saída.</p>
+                        </div>
+                        <span class="panel-chip orange">EMPRÉSTIMOS</span>
+                    </div>
+
+                    <form id="formEmprestimo" class="form-panel loan-form">
+                        <div class="field">
+                            <label for="livroEmprestimo">Livro</label>
+                            <select id="livroEmprestimo" required>
+                                <option value="">Selecione um livro</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="usuarioEmprestimo">Usuário</label>
+                            <select id="usuarioEmprestimo" required>
+                                <option value="">Selecione um usuário</option>
+                            </select>
+                        </div>
+                        <div class="form-submit">
+                            <button class="primary-button orange-button" type="submit">Registrar empréstimo <span>→</span></button>
+                        </div>
+                    </form>
+
+                    <div class="list-toolbar">
+                        <div>
+                            <h3>Histórico</h3>
+                            <span id="emprestimosResumo">0 registros</span>
+                        </div>
+                        <div class="toolbar-actions">
+                            <div class="search-box">
+                                <span>⌕</span>
+                                <input id="buscarEmprestimos" type="search" placeholder="Buscar livro ou usuário" aria-label="Buscar empréstimos">
+                            </div>
+                            <button class="outline-button" type="button" data-refresh="emprestimos">Atualizar</button>
+                        </div>
+                    </div>
+                    <div id="listaEmprestimos" class="cards-grid" aria-live="polite"></div>
+                </section>
+            </main>
+
+            <footer class="footer">
+                <span>Sistema de Biblioteca</span>
+                <span>Projeto educacional</span>
+            </footer>
+        </div>
+    </div>
+
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <div class="modal-backdrop" id="confirmModal" hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-icon">!</div>
+            <h2 id="modalTitle">Confirmar ação</h2>
+            <p id="modalText">Deseja continuar?</p>
+            <div class="modal-actions">
+                <button class="outline-button" id="modalCancel" type="button">Cancelar</button>
+                <button class="danger-button" id="modalConfirm" type="button">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>
